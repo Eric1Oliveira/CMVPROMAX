@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 48 48" fill="none">
+  <!-- Versão maskable: fundo cobre 100% da área (safe zone central de 80%) -->
+  <rect width="48" height="48" fill="#2563EB"/>
+  <path d="M29.5 19a6.8 6.8 0 1 0 0 10" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round"/>
+  <circle cx="31.6" cy="24" r="2" fill="#93C5FD"/>
+</svg>

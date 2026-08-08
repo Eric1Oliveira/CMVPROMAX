@@ -1,0 +1,27 @@
+{
+  "name": "CMV Pro — Gestão de CMV e Precificação",
+  "short_name": "CMV Pro",
+  "description": "O sistema mais intuitivo para cálculo de CMV, ficha técnica, precificação e gestão financeira para food service.",
+  "lang": "pt-BR",
+  "start_url": "./index.html#/dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F7F8FA",
+  "theme_color": "#2563EB",
+  "categories": ["business", "finance", "food", "productivity"],
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

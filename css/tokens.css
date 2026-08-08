@@ -1,0 +1,209 @@
+/* ============================================================================
+   CMV Pro — Design Tokens
+   ----------------------------------------------------------------------------
+   Fonte única de verdade do design system. Nenhum componente usa cor, sombra,
+   raio ou espaçamento "solto": tudo referencia estes tokens.
+
+   Temas: o tema é resolvido pelo JS e aplicado como [data-theme="light|dark"]
+   no <html>. A preferência "auto" segue o sistema operacional.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------ */
+  /* Tipografia — stack de sistema (carregamento zero, offline-ready)   */
+  /* ------------------------------------------------------------------ */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Escala tipográfica (mobile-first; cresce em telas maiores) */
+  --text-xs:   0.75rem;   /* 12px — legendas, badges          */
+  --text-sm:   0.8125rem; /* 13px — texto secundário, tabelas */
+  --text-base: 0.875rem;  /* 14px — corpo padrão              */
+  --text-md:   0.9375rem; /* 15px — inputs, botões            */
+  --text-lg:   1.0625rem; /* 17px — títulos de card           */
+  --text-xl:   1.25rem;   /* 20px — títulos de seção          */
+  --text-2xl:  1.5rem;    /* 24px — títulos de página         */
+  --text-3xl:  1.875rem;  /* 30px — números hero              */
+  --text-4xl:  2.25rem;   /* 36px — hero do dashboard         */
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.55;
+
+  /* ------------------------------------------------------------------ */
+  /* Espaçamento (escala de 4px)                                        */
+  /* ------------------------------------------------------------------ */
+  --sp-1: 0.25rem;  /*  4px */
+  --sp-2: 0.5rem;   /*  8px */
+  --sp-3: 0.75rem;  /* 12px */
+  --sp-4: 1rem;     /* 16px */
+  --sp-5: 1.25rem;  /* 20px */
+  --sp-6: 1.5rem;   /* 24px */
+  --sp-8: 2rem;     /* 32px */
+  --sp-10: 2.5rem;  /* 40px */
+  --sp-12: 3rem;    /* 48px */
+  --sp-16: 4rem;    /* 64px */
+
+  /* ------------------------------------------------------------------ */
+  /* Raios de borda — suaves, assinatura visual do produto              */
+  /* ------------------------------------------------------------------ */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+
+  /* ------------------------------------------------------------------ */
+  /* Movimento — animações curtas e naturais                            */
+  /* ------------------------------------------------------------------ */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);       /* deslocamentos          */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);    /* entradas (modais etc.) */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+
+  /* ------------------------------------------------------------------ */
+  /* Camadas (z-index)                                                  */
+  /* ------------------------------------------------------------------ */
+  --z-sticky: 30;
+  --z-sidebar: 40;
+  --z-bottomnav: 50;
+  --z-fab: 55;
+  --z-dropdown: 60;
+  --z-modal: 80;
+  --z-toast: 100;
+
+  /* ------------------------------------------------------------------ */
+  /* Dimensões do shell                                                 */
+  /* ------------------------------------------------------------------ */
+  --sidebar-w: 264px;
+  --sidebar-w-collapsed: 68px;
+  --topbar-h: 60px;
+  --bottomnav-h: 62px;
+  --content-max: 1240px;
+}
+
+/* ============================================================================
+   TEMA CLARO
+   ========================================================================== */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Superfícies */
+  --bg: #F7F8FA;            /* fundo da página                          */
+  --surface: #FFFFFF;       /* cards, painéis                           */
+  --surface-2: #F3F4F6;     /* áreas rebaixadas (inputs, wells)         */
+  --surface-hover: #F8FAFC; /* hover de linhas/itens                    */
+
+  /* Texto */
+  --text: #121212;
+  --text-2: #52525B;        /* secundário                               */
+  --text-3: #8E8E99;        /* mudo (placeholders, eixos, hints)        */
+  --text-inverse: #FFFFFF;
+
+  /* Bordas */
+  --border: #E7E8EC;                      /* hairline padrão            */
+  --border-strong: #D6D8DE;               /* inputs, divisores fortes  */
+  --ring: rgba(37, 99, 235, 0.35);         /* anel de foco              */
+
+  /* Marca */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-soft: #EFF4FE;   /* fundos suaves (item ativo, chips)       */
+  --primary-soft-2: #DBEAFE;
+
+  /* Semânticas */
+  --success: #16A34A;
+  --success-soft: #EAF7EF;
+  --warning: #F59E0B;
+  --warning-soft: #FDF4E3;
+  --danger: #DC2626;
+  --danger-soft: #FDEDED;
+  --info: #0E9888;
+  --info-soft: #E8F6F4;
+
+  /* Sombras — discretas, difusas */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.07), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.12), 0 4px 8px rgba(16, 24, 40, 0.05);
+
+  /* Glass (usado com parcimônia: topbar, bottom-nav) */
+  --glass-bg: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(18, 18, 18, 0.06);
+
+  /* --------------------------------------------------------------------
+     Gráficos — paleta categórica VALIDADA (CVD ΔE 47.9, contraste ≥3:1
+     sobre #FFFFFF). Ordem fixa dos slots: nunca ciclar nem reordenar.
+     -------------------------------------------------------------------- */
+  --chart-1: #2563EB;   /* azul (marca) — receita / série principal */
+  --chart-2: #0E9888;   /* teal — custo / série 2                   */
+  --chart-3: #B45309;   /* âmbar — série 3                          */
+  --chart-4: #7C3AED;   /* violeta — série 4                        */
+  --chart-grid: #EEEFF2;      /* gridline hairline                  */
+  --chart-axis: #C9CBD3;      /* linha de eixo/baseline             */
+  --chart-area-alpha: 0.10;   /* opacidade de área sob linhas       */
+}
+
+/* ============================================================================
+   TEMA ESCURO
+   ========================================================================== */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #09090B;
+  --surface: #18181B;
+  --surface-2: #202024;
+  --surface-hover: #1F1F23;
+
+  --text: #F4F4F5;
+  --text-2: #A1A1AA;
+  --text-3: #6E6E77;
+  --text-inverse: #121212;
+
+  --border: #26262B;
+  --border-strong: #34343B;
+  --ring: rgba(59, 130, 246, 0.45);
+
+  --primary: #3B82F6;
+  --primary-hover: #60A5FA;
+  --primary-soft: rgba(59, 130, 246, 0.14);
+  --primary-soft-2: rgba(59, 130, 246, 0.24);
+
+  --success: #22C55E;
+  --success-soft: rgba(34, 197, 94, 0.13);
+  --warning: #F59E0B;
+  --warning-soft: rgba(245, 158, 11, 0.14);
+  --danger: #EF4444;
+  --danger-soft: rgba(239, 68, 68, 0.14);
+  --info: #14B8A6;
+  --info-soft: rgba(20, 184, 166, 0.13);
+
+  /* Sombras no escuro: mais profundas, menos espalhadas */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+
+  --glass-bg: rgba(24, 24, 27, 0.75);
+  --glass-border: rgba(244, 244, 245, 0.07);
+
+  /* Paleta de gráficos VALIDADA para superfície #18181B (banda L 0.48–0.67) */
+  --chart-1: #3B82F6;
+  --chart-2: #0D9488;
+  --chart-3: #D97706;
+  --chart-4: #8B5CF6;
+  --chart-grid: #232328;
+  --chart-axis: #3A3A41;
+  --chart-area-alpha: 0.12;
+}
+
+/* Usuários que preferem menos movimento: desliga animações não essenciais */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-base: 1ms;
+    --dur-slow: 1ms;
+  }
+}

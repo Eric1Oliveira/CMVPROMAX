@@ -1,0 +1,183 @@
+/* ============================================================================
+   CMV Pro — Base
+   ----------------------------------------------------------------------------
+   Reset moderno, tipografia global, acessibilidade e utilitários mínimos.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  height: 100%;
+  /* Nada estoura a largura da tela → nunca há rolagem horizontal */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* toque responde na hora (sem atraso/zoom de duplo-toque) */
+  touch-action: manipulation;
+  /* Transição suave ao alternar tema */
+  transition: background-color var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+}
+
+/* Mídia nunca estoura o contêiner */
+img, svg, video, canvas {
+  display: block;
+  max-width: 100%;
+}
+
+/* Elementos de formulário herdam a tipografia do produto */
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+ul, ol { list-style: none; }
+
+h1, h2, h3, h4 {
+  line-height: var(--leading-tight);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+/* Foco visível e consistente para navegação por teclado (contraste AA) */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Seleção de texto com a cor da marca */
+::selection {
+  background: var(--primary-soft-2);
+  color: var(--text);
+}
+
+/* Scrollbars discretas (WebKit) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background-color: var(--text-3); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------------------------------------------------------------------------
+   Acessibilidade
+   ------------------------------------------------------------------------- */
+
+/* Conteúdo apenas para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Link "pular para o conteúdo" (aparece ao focar via teclado) */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: var(--sp-4);
+  z-index: var(--z-toast);
+  background: var(--surface);
+  color: var(--text);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: top var(--dur-base) var(--ease);
+}
+.skip-link:focus { top: var(--sp-4); }
+
+/* ---------------------------------------------------------------------------
+   Splash screen (primeira pintura, antes do JS montar o app)
+   ------------------------------------------------------------------------- */
+.splash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  background: var(--bg);
+  z-index: var(--z-toast);
+  transition: opacity var(--dur-slow) var(--ease);
+}
+.splash.is-leaving { opacity: 0; pointer-events: none; }
+
+.splash__spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2.5px solid var(--border-strong);
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------------------------------------------------------------------------
+   Utilitários mínimos (usados pelos módulos JS)
+   ------------------------------------------------------------------------- */
+.hidden { display: none !important; }
+
+.text-2 { color: var(--text-2); }
+.text-3 { color: var(--text-3); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+
+/* Números em colunas (tabelas, eixos) alinham verticalmente */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Truncamento com reticências */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Animação de entrada padrão de páginas/cards */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim-in { animation: fade-up var(--dur-slow) var(--ease-out) both; }

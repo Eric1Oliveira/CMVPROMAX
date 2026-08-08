@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <!-- viewport-fit=cover: respeita as áreas seguras (notch); zoom desativado
+       para uma experiência de app (sem pinça, sem duplo-toque que amplia) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="description" content="CMV Pro — o sistema mais intuitivo para cálculo de CMV, ficha técnica, precificação e gestão financeira para food service." />
+
+  <title>CMV Pro — Gestão de CMV e Precificação</title>
+
+  <!-- Cor da barra do navegador acompanha o tema ativo -->
+  <meta name="theme-color" content="#F7F8FA" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg" />
+  <link rel="apple-touch-icon" href="assets/icons/icon.svg" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <!--
+    Aplica o tema salvo ANTES da primeira pintura para evitar "flash" de tema errado.
+    Mantido inline de propósito: precisa executar antes de qualquer CSS ser renderizado.
+  -->
+  <script>
+    (function () {
+      try {
+        var pref = localStorage.getItem('cmvpro:theme') || 'auto';
+        var dark = pref === 'dark' || (pref === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* armazenamento indisponível: segue o tema claro padrão */ }
+    })();
+  </script>
+
+  <!-- Camadas de estilo (ordem importa: tokens → base → layout → componentes → páginas) -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+
+  <!--
+    Banner "offline" REMOVIDO definitivamente. Esta regra vive no HTML
+    (sempre servido fresco da rede) de propósito: elimina o banner até em
+    navegadores executando versões antigas do app presas em cache.
+  -->
+  <style>.offline-banner { display: none !important; }</style>
+</head>
+<body>
+  <!-- Splash exibido enquanto os módulos JS carregam; removido pelo main.js -->
+  <div id="splash" class="splash" aria-hidden="true">
+    <div class="splash__logo">
+      <svg width="44" height="44" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <rect x="4" y="4" width="40" height="40" rx="12" fill="var(--primary)"/>
+        <path d="M30.5 18.5a7.5 7.5 0 1 0 0 11" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="splash__spinner" role="status" aria-label="Carregando CMV Pro"></div>
+  </div>
+
+  <!-- Raiz da aplicação: o shell (auth ou app) é renderizado aqui pelo router -->
+  <div id="app" hidden></div>
+
+  <!-- Camada de sobreposição: toasts, modais e sheets são portais anexados aqui -->
+  <div id="overlay-root"></div>
+
+  <noscript>
+    <div style="padding:2rem;text-align:center;font-family:system-ui">
+      O CMV Pro precisa de JavaScript habilitado para funcionar.
+    </div>
+  </noscript>
+
+  <!--
+    Resgate ÚNICO de dispositivos presos em cache antigo do service worker
+    (bug corrigido no sw.js v1.5.4 — instalações passadas copiavam arquivos
+    velhos do cache HTTP). Este HTML sempre chega fresco da rede (navegação
+    é network-first), então o reset alcança qualquer dispositivo: remove o
+    SW e os caches antigos uma única vez e recarrega limpo.
+  -->
+  <script>
+    (async () => {
+      try {
+        if (localStorage.getItem('cmvpro:cachefix2') === '1') return;
+        // Sem SW controlando a página = instalação nova/saudável: só marca.
+        if (!navigator.serviceWorker || !navigator.serviceWorker.controller) {
+          localStorage.setItem('cmvpro:cachefix2', '1');
+          return;
+        }
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+        if (window.caches) {
+          const keys = await caches.keys();
+          await Promise.all(
+            keys.filter((k) => k.startsWith('cmvpro-')).map((k) => caches.delete(k))
+          );
+        }
+        // Flag só APÓS o sucesso: se algo falhar, tenta de novo na próxima carga.
+        localStorage.setItem('cmvpro:cachefix2', '1');
+        location.reload(); // volta sem SW; o main.js registra a versão nova
+      } catch (e) { /* nunca bloqueia o app por causa da limpeza */ }
+    })();
+  </script>
+
+  <!-- Ponto de entrada da aplicação (ES Modules — requer um servidor local) -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+/* ============================================================================
+   CMV Pro — Layout do Shell
+   ----------------------------------------------------------------------------
+   Mobile-first: topbar + bottom-nav + FAB no celular; sidebar fixa no desktop.
+   Estrutura montada pelo router em js/main.js:
+
+   .app-shell
+     ├── .sidebar          (desktop ≥1024px; drawer no mobile)
+     ├── .app-main
+     │     ├── .topbar
+     │     └── .app-content  → páginas renderizam aqui
+     ├── .bottom-nav       (apenas mobile)
+     └── .fab              (apenas mobile)
+   ========================================================================== */
+
+.app-shell {
+  min-height: 100dvh;
+  display: flex;
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar (drawer no mobile, fixa no desktop)
+   ------------------------------------------------------------------------- */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--z-sidebar);
+  transform: translateX(-100%);              /* escondida no mobile */
+  transition: transform var(--dur-slow) var(--ease-out);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.sidebar.is-open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+
+/* Véu escurecido atrás do drawer no mobile */
+.sidebar-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: calc(var(--z-sidebar) - 1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease);
+}
+.sidebar-scrim.is-visible { opacity: 1; pointer-events: auto; }
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sidebar__brand svg { flex-shrink: 0; }
+
+.sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-2) var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Rótulo de grupo de navegação */
+.sidebar__group {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  padding: var(--sp-4) var(--sp-3) var(--sp-1);
+  user-select: none;
+}
+
+/* Item de navegação */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  min-height: 38px;
+  border-radius: var(--radius-md);
+  color: var(--text-2);
+  font-size: var(--text-md);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.nav-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-item.is-active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 600;
+}
+.nav-item svg { flex-shrink: 0; opacity: 0.9; }
+
+/* Rodapé da sidebar: usuário logado */
+.sidebar__footer {
+  border-top: 1px solid var(--border);
+  padding: var(--sp-3);
+}
+
+/* ---------------------------------------------------------------------------
+   Área principal
+   ------------------------------------------------------------------------- */
+.app-main {
+  flex: 1;
+  min-width: 0;                 /* permite conteúdo com scroll horizontal interno */
+  display: flex;
+  flex-direction: column;
+  /* espaço para a bottom-nav no mobile */
+  padding-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom));
+}
+
+/* Topbar translúcida (efeito glass discreto) */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-4);
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.topbar__title {
+  font-size: var(--text-lg);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Busca global (desktop) */
+.topbar__search {
+  display: none;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: 0 1 340px;
+  height: 38px;
+  padding: 0 var(--sp-3);
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-3);
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.topbar__search:focus-within {
+  border-color: var(--primary);
+  background: var(--surface);
+}
+.topbar__search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--text);
+  font-size: var(--text-base);
+}
+.topbar__search input::placeholder { color: var(--text-3); }
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+/* Conteúdo da página */
+.app-content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-4);
+}
+
+/* Cabeçalho padrão de página */
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+.page-head__text { flex: 1; min-width: 200px; }
+.page-head h1 {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.02em;
+}
+.page-head p {
+  color: var(--text-2);
+  margin-top: 2px;
+  font-size: var(--text-base);
+}
+.page-head__actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* Grid utilitário responsivo para cards */
+.grid {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+}
+.grid--kpi { grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr)); }
+.grid--2 { grid-template-columns: 1fr; }
+
+@media (min-width: 900px) {
+  .grid--2 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------------------------------------------------------------------------
+   Bottom navigation (apenas mobile) — com glass
+   ------------------------------------------------------------------------- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-bottomnav);
+  height: calc(var(--bottomnav-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--glass-border);
+}
+
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-nav__item:hover { text-decoration: none; }
+.bottom-nav__item.is-active { color: var(--primary); }
+.bottom-nav__item.is-active svg { transform: translateY(-1px); }
+.bottom-nav__item svg { transition: transform var(--dur-fast) var(--ease); }
+
+/* Botão "+" central elevado: abre o HUD de atalhos */
+.bottom-nav__launcher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-nav__plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-lg), 0 0 0 5px var(--bg);
+  transform: translateY(-16px);
+  transition: transform var(--dur-base) var(--ease), background var(--dur-fast) var(--ease);
+}
+.bottom-nav__launcher:active .bottom-nav__plus { transform: translateY(-16px) scale(0.92); }
+.bottom-nav__launcher.is-open .bottom-nav__plus {
+  transform: translateY(-16px) rotate(135deg); /* "+" vira "×" */
+  background: var(--primary-hover);
+}
+
+/* ---------------------------------------------------------------------------
+   FAB — gatilho invisível da ação primária de cada página.
+   Fica no DOM (o command palette dispara a ação via .fab.click()), mas NÃO é
+   exibido: a ação de adicionar já está no botão do cabeçalho e o "+" visível
+   da barra inferior é o do HUD de navegação. Isso evita dois "+" na tela.
+   ------------------------------------------------------------------------- */
+.fab { display: none; }
+
+/* ---------------------------------------------------------------------------
+   Desktop (≥1024px): sidebar fixa, sem bottom-nav/FAB
+   ------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .sidebar {
+    transform: none;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    flex-shrink: 0;
+  }
+  .sidebar-scrim { display: none; }
+
+  .app-main { padding-bottom: 0; }
+  .bottom-nav, .fab { display: none; }
+
+  .topbar { padding: 0 var(--sp-8); }
+  .topbar__search { display: flex; }
+
+  .app-content { padding: var(--sp-8); }
+}
+
+/* Telas médias (tablet): mais respiro no conteúdo */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .app-content { padding: var(--sp-6); }
+}
+
+/* ---------------------------------------------------------------------------
+   Shell de autenticação (login / cadastro / recuperar)
+   ------------------------------------------------------------------------- */
+.auth-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-4);
+  /* Gradiente radial sutil com a cor da marca — profundidade sem ruído */
+  background:
+    radial-gradient(1200px 600px at 50% -10%, var(--primary-soft), transparent 60%),
+    var(--bg);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--sp-8) var(--sp-6);
+}
+
+.auth-card__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sp-6);
+}
+
+.auth-card h1 {
+  font-size: var(--text-xl);
+  text-align: center;
+  margin-bottom: var(--sp-1);
+}
+.auth-card__subtitle {
+  text-align: center;
+  color: var(--text-2);
+  font-size: var(--text-base);
+  margin-bottom: var(--sp-6);
+}
+.auth-card__footer {
+  margin-top: var(--sp-5);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-2);
+}
+
+@media (min-width: 640px) {
+  .auth-card { padding: var(--sp-10) var(--sp-10); }
+}
